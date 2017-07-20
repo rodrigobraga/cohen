@@ -6,6 +6,15 @@ services:
     memcached:
         image: memcached:alpine
 
+    rabbitmq:
+        image: rabbitmq:alpine
+        environment:
+            - RABBITMQ_PASS=mypass
+            - C_FORCE_ROOT=true
+        ports:
+            - "5672:5672"
+            - "15672:15672"
+
     application:
         build: containers/application/
         command: python manage.py runserver 0.0.0.0:8000 -v 3
@@ -33,15 +42,6 @@ services:
             - "4000:8080"
         links:
             - application
-
-    rabbitmq:
-        image: rabbitmq:alpine
-        environment:
-            - RABBITMQ_PASS=mypass
-            - C_FORCE_ROOT=true
-        ports:
-            - "5672:5672"
-            - "15672:15672"
 
     worker:
         build: containers/application/
