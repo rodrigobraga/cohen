@@ -1,0 +1,17 @@
+body {
+    color:#757575;
+}
+
+.cohen-full-width {
+    width: 100%;
+}
+
+.cohen-fab-button-bottom {
+    position: absolute;
+    right: 40px;
+    bottom: 40px;
+}
+
+.mdl-button {
+    margin-right: 5px;
+}

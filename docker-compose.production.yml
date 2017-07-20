@@ -1,0 +1,26 @@
+version: "3"
+services:
+    application:
+        command: gunicorn --bind "0.0.0.0:8000" --workers 4 --reload cohen.wsgi
+        working_dir: /usr/src/app
+        volumes:
+            - ./cohen/:/usr/src/app
+        environment:
+            - DJANGO_SETTINGS_MODULE=cohen.settings.production
+        env_file:
+            - .env
+        links:
+            - postgres
+            - worker
+            - memcached
+        depends_on:
+            - postgres
+
+    nginx:
+        image: nginx:alpine
+        volumes:
+            - ./containers/nginx/nginx.conf:/etc/nginx/conf.d/cohen.conf:ro
+        ports:
+            - "80:8080"
+        links:
+            - application

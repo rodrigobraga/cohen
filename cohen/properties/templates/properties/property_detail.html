@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block content %}
+    <div class="mdl-grid">
+        <div class="mdl-cell mdl-cell--1-col"></div>
+        <div class="mdl-cell mdl-cell--10-col">
+            <h2 class="mdl-typography--display-3">{{ object.title }} <sup><small>{{ object.property_type }}</small></sub></h2>
+            <h5 class="mdl-typography--headline">{{ object.address }}</h5>
+
+            <quote><i class="material-icons">format_quote</i>{{ object.description }}</quote>
+            <br /><br />
+
+            <p>Price {{ object.price | floatformat:"2" }}</p>
+
+            <iframe     height="300"
+                        frameborder="0"
+                        style="border:0"
+                        src="https://www.google.com/maps/embed/v1/place?key=AIzaSyBtD6E4LlE6GsJ5dFidAdIMfLskT-B7yXs&q={{ object.point.tuple }}"
+                        allowfullscreen
+                        class="cohen-full-width"></iframe><br /><br />
+
+            <img src="{{ object.image.url }}" width="400" height="300" />
+
+            <hr />
+
+            <h6 class="mdl-typography--title">Near properties</h6>
+
+            {% for property in related.all %}
+                <a href="{% url "property-available-detail" property.slug %}">{{ property.title }}</p>
+            {% empty %}
+                <p>nothing near around</p>
+            {% endfor %}
+        </div>
+        <div class="mdl-cell mdl-cell--1-col"></div>
+    </div>
+{% endblock %}

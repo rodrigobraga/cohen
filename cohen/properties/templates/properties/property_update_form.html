@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block content %}
+    <div class="mdl-grid">
+        <div class="mdl-cell mdl-cell--1-col"></div>
+        <div class="mdl-cell mdl-cell--10-col">
+            <form action="." method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+
+                <p>
+                    <label>Created by:</label>
+                    <input type="text" value="{{ object.created_by.username }}" readonly />
+                </p>
+
+                <p>
+                    <label>Created date:</label>
+                    <input type="text" value="{{ object.created_date }}" readonly />
+                </p>
+
+                <p>
+                    <label>Updated date:</label>
+                    <input type="text" value="{{ object.updated_date }}" readonly />
+                </p><br />
+
+                <button type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">save</button>
+                <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent" href="{% url "property-delete" object.slug %}">delete</a>
+                <a class="mdl-button mdl-js-button mdl-button--raised" href="{% url "property-list" %}">back to list</a>
+            </form>
+        </div>
+        <div class="mdl-cell mdl-cell--1-col"></div>
+    </div>
+{% endblock %}

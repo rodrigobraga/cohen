@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block content %}
+    <div class="mdl-grid">
+        <div class="mdl-cell mdl-cell--1-col"></div>
+        <div class="mdl-cell mdl-cell--10-col">
+            <h2 class="mdl-typography--display-3">Properties</h2>
+
+            <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp cohen-full-width">
+                <thead>
+                    <tr>
+                        <th class="mdl-data-table__cell--non-numeric" width="40">Title</th>
+                        <th class="mdl-data-table__cell--non-numeric" width="40">Address</th>
+                        <th class="mdl-data-table__cell--non-numeric" width="10">Available?</th>
+                        <th class="mdl-data-table__cell--non-numeric" width="5%"></th>
+                        <th class="mdl-data-table__cell--non-numeric" width="5%"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for property in object_list %}
+                    <tr>
+                        <td class="mdl-data-table__cell--non-numeric">{{ property.title }}</td>
+                        <td class="mdl-data-table__cell--non-numeric">{{ property.address }}</td>
+                        <td class="mdl-data-table__cell--non-numeric">{{ property.is_available | yesno }}</td>
+                        <td class="mdl-data-table__cell--non-numeric">
+                            <a href="{% url 'property-update' property.slug %}" class="mdl-button mdl-js-button mdl-button--icon">
+                                <i class="material-icons">edit</i>
+                            </a>
+                        </td>
+                        <td class="mdl-data-table__cell--non-numeric">
+                            <a href="{% url 'property-delete' property.slug %}"  class="mdl-button mdl-js-button mdl-button--icon">
+                                <i class="material-icons">delete</i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td class="mdl-data-table__cell--non-numeric">No properties were found.</a></td>
+                        <td class="mdl-data-table__cell--non-numeric"></td>
+                        <td class="mdl-data-table__cell--non-numeric"></td>
+                        <td class="mdl-data-table__cell--non-numeric"></td>
+                        <td class="mdl-data-table__cell--non-numeric"></td>
+                    </tr>
+                    {% endfor %}
+              </tbody>
+            </table>
+        </div>
+        <div class="mdl-cell mdl-cell--1-col"></div>
+    </div>
+
+    <a class="mdl-navigation__link mdl-button mdl-js-button mdl-button--fab mdl-button--colored cohen-fab-button-bottom" href="{% url "property-add" %}">
+        <i class="material-icons">add</i>
+    </a>
+{% endblock %}

@@ -1,0 +1,48 @@
+{% load static %}
+
+<!doctype html>
+<html lang="en">
+    <head>
+        <title>Cohen</title>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" type="text/css">
+        <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.blue-pink.min.css">
+
+        <link rel="stylesheet" href="{% static "core.css" %}">
+    </head>
+    <body>
+        <div class="mdl-grid">
+            <div class="mdl-cell mdl-cell--4-col"></div>
+            <div class="mdl-cell mdl-cell--4-col">
+                <center>
+                    <img src="{% static "logo.jpg" %}" border="0" />
+                </center>
+
+                <form action="/access/login/" method="post">
+                    {% csrf_token %}
+
+                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label cohen-full-width">
+                        <input class="mdl-textfield__input" type="text" name="username" id="username" value="{{ form.username.value }}">
+                        <label class="mdl-textfield__label" for="username">username</label>
+                    </div>
+
+                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label cohen-full-width">
+                        <input class="mdl-textfield__input" type="password" name="password" id="password">
+                        <label class="mdl-textfield__label" for="password">password</label>
+                    </div>
+
+                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">log in</button>
+
+                    {{ form.errors }}
+                </form>
+
+            </div>
+            <div class="mdl-cell mdl-cell--4-col"></div>
+        </div>
+
+        <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+    </body>
+</html>

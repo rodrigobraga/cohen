@@ -1,0 +1,60 @@
+version: "3"
+services:
+    postgres:
+        build: containers/postgres/
+
+    memcached:
+        image: memcached:alpine
+
+    application:
+        build: containers/application/
+        command: python manage.py runserver 0.0.0.0:8000 -v 3
+        working_dir: /usr/src/app
+        volumes:
+            - ./cohen/:/usr/src/app
+        environment:
+            - DJANGO_SETTINGS_MODULE=cohen.settings.development
+        env_file:
+            - .env
+        links:
+            - postgres
+            - worker
+            - memcached
+        depends_on:
+            - postgres
+
+    nginx:
+        image: nginx:alpine
+        volumes:
+            - ./containers/nginx/nginx.conf:/etc/nginx/conf.d/cohen.conf:ro
+            - ./cohen/static/:/usr/share/nginx/html/static/:ro
+            - ./cohen/media/:/usr/share/nginx/html/media/:ro
+        ports:
+            - "4000:8080"
+        links:
+            - application
+
+    rabbitmq:
+        image: rabbitmq:alpine
+        environment:
+            - RABBITMQ_PASS=mypass
+            - C_FORCE_ROOT=true
+        ports:
+            - "5672:5672"
+            - "15672:15672"
+
+    worker:
+        build: containers/application/
+        command: celery -A cohen worker -l info
+        working_dir: /usr/src/app
+        volumes:
+            - ./cohen/:/usr/src/app
+        environment:
+            - C_FORCE_ROOT=true
+            - BROKER_URL=amqp://guest:guest@rabbit:5672//
+        env_file:
+            - .env
+        links:
+            - rabbitmq:rabbit
+        depends_on:
+            - rabbitmq
